@@ -9,7 +9,7 @@
 Identity, permissions, and dependable execution for AI agents.<br>
 Built on open-source Rust foundations.
 
-[Explore the foundations](#open-source-foundations) · [Read the identity overview](https://github.com/devrandom-labs/cesr#readme) · [Talk to Joel](mailto:joel@devrandom.co)
+[Explore the foundations](#open-source-foundations) · [Compare the technologies](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md) · [Talk to Joel](mailto:joel@devrandom.co)
 
 </div>
 
@@ -75,6 +75,26 @@ action, survive a lost reply or restart, and recover the outcome without blindly
 repeating the action. Permissions, approvals, withdrawal of access, and recovery
 are being developed as one execution problem. The complete workflow is not yet
 available.
+
+## Where we compete
+
+We compete across the stack: identity, permissions, agent frameworks, and durable
+execution. A customer may choose one platform or assemble several tools. Our
+focus is keeping the owner's authority connected to the work from approval
+through execution and recovery.
+
+| Customer need | Technologies in the comparison |
+| --- | --- |
+| Identity and access | OAuth / OpenID Connect, Entra Agent ID, Google Agent Identity, Auth0, Keycloak, SPIFFE, DIDs and verifiable credentials, KERIpy / KERIA / Signify |
+| Delegation and permissions | Both PAP protocols, UCAN, Cedar, OPA, OpenFGA, AWS AgentCore Policy |
+| Agent interaction and transactions | MCP, A2A, AP2, Agentic Commerce Protocol, ERC-8004, x402 |
+| Agent and application execution | LangGraph, Google ADK, Microsoft Agent Framework, Akka, Orleans, Erlang/OTP |
+| Durable work and recovery | Temporal, Restate, Dapr |
+
+**[Read the head-to-head comparison](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md)**
+for strengths, tradeoffs, our position, and the same failure scenarios applied to
+each relevant system. It includes primary sources and distinguishes available
+capabilities from development goals.
 
 ## Build with us
 
