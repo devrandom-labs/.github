@@ -1,102 +1,89 @@
-<!-- This file renders on https://github.com/devrandom-labs -->
-<!-- It lives at devrandom-labs/.github → profile/README.md -->
+<!-- Organization profile: https://github.com/devrandom-labs -->
 
-# `devrandom-labs`
+<div align="center">
 
-> **Agents you can prove. Agents you can stop.**
+# /dev/random
 
-Open-source Rust infrastructure for accountable AI agents — verifiable identity,
-a tamper-proof record, and a real kill switch. On your hardware; cloud optional.
+### Give agents authority. Keep control.
 
-```console
-joel@devrandom.co:~$ ./manifesto
+Identity, permissions, and dependable execution for AI agents.<br>
+Built on open-source Rust foundations.
 
-The next decade of software is autonomous — and autonomy without
-accountability is a liability, not a feature. So we build the boring,
-load-bearing layer underneath: identity, memory, and control for AI
-agents, as open-source infrastructure anyone can verify.
+[Explore the foundations](#open-source-foundations) · [Read the identity overview](https://github.com/devrandom-labs/cesr#readme) · [Talk to Joel](mailto:joel@devrandom.co)
 
-No black boxes. Built in the open, in Rust, one tested layer at a time.
-```
+</div>
 
 ---
 
-## The problem we're shipping against
+An agent that can use your tools can also change your business. You need to know
+who it represents, what it may do, and what actually happened when it acted.
 
-You're handing AI agents your shell, your APIs, your money. Today that means:
+**We're building the connection between identity and action:** identities that
+people and organizations control, explicit permission to act on their behalf,
+and an execution system that enforces those decisions as work happens.
 
-```diff
-  joel@devrandom.co:~$ diff status-quo devrandom
+## What we're building
 
-- no real record         a log anyone could rewrite
-+ a record no one can doctor — signed, ordered, replayable
+The goal is to make delegated work answer four concrete questions:
 
-- no real kill switch     the API key can't stop what's already running
-+ revoke mid-task — the next action is refused, even offline
+| Question | What it means in practice |
+| --- | --- |
+| **Who does this agent represent?** | Verify the agent's identity and the evidence connecting it to a person or organization. |
+| **What may it do?** | Limit access to particular resources and actions. Require approval for the actions that need it. |
+| **Can I change my mind?** | Withdraw permission and prevent further actions once that change is known to the execution system. |
+| **What actually happened?** | Recover the recorded decisions and outcomes after an interruption, and resolve uncertain results before retrying. |
 
-- not really yours        agents live in a vendor's account
-+ IDs you issue — portable across models, clouds, vendors
+Identity supplies the evidence. The resource owner decides what that evidence
+permits. The execution system must apply that decision when the agent acts.
 
-- nowhere but the cloud    offline, your agents die
-+ your devices form their own network — even on a plane
-```
+## A concrete example
 
----
+Ask an agent to investigate a customer issue. Give it access to the relevant
+records and permission to draft a response. Sending that response requires
+approval of the exact message.
 
-## The stack — four Rust layers
+The workflow we're building toward keeps those decisions explicit: access to
+records, permission to investigate, and approval to send. If access is withdrawn,
+further work must respect that change. If the system restarts after sending but
+before receiving confirmation, it must resolve the outcome before trying again.
 
-An ID card, a flight recorder, a place to run, and a leash. Each is a crate you
-can adopt on its own.
+**Useful autonomy means you can delegate the work and retain authority over it.**
 
-```console
-joel@devrandom.co:~$ tree ./stack
+## Open-source foundations
 
-./stack
-├─ cesr .......... an ID card for every agent .......... SHIPPED  v0.9.0
-├─ mnesis ........ a flight recorder ................... building
-├─ bombay ........ a place to run ..................... building
-└─ agency ........ a leash ............................ soon
-```
+The public libraries already contain working code and examples. Each has its
+own scope and development status; the integrated agent product is still being
+built.
 
-| Layer | Role | What it gives you | Status |
-|---|---|---|---|
-| **[cesr](https://github.com/devrandom-labs/cesr)** | An ID card | Verifiable IDs you issue, rotate, and revoke. Implements [KERI](https://keri.one), the open standard. `no_std` / WASM-capable. | **Shipped** — [`cesr-rs`](https://crates.io/crates/cesr-rs) v0.9.0 |
-| **[mnesis](https://github.com/devrandom-labs/mnesis)** | A flight recorder | Every action signed, hash-chained, replayable. Don't investigate — rewind. Strongly-typed CQRS / event-sourcing kernel. | Building |
-| **[bombay](https://github.com/devrandom-labs/bombay)** | A place to run | Agents live on your devices, talk directly, keep working offline. A Zenoh-native actor runtime. | Building |
-| **agency** | A leash | Grant exact powers, watch them used, take them back mid-task. The product that ties the stack together. | Soon |
+| Project | What exists today | Start here |
+| --- | --- | --- |
+| **[CESR / KERI](https://github.com/devrandom-labs/cesr)** | Cryptographic identity foundations: identifiers, key histories, rotation, delegation of identifier control, and credential verification for supported protocol profiles. | [Identity example](https://github.com/devrandom-labs/cesr/blob/main/crates/keri/examples/direct_mode.rs) · [Supported capabilities](https://github.com/devrandom-labs/cesr/blob/main/docs/capability-matrix.md) |
+| **[Behavior](https://github.com/devrandom-labs/bombay-behavior)** | Predictable, testable actor logic with explicit actions and reusable policies for supervision, timing, and shutdown. | [Overview and examples](https://github.com/devrandom-labs/bombay-behavior#readme) |
+| **[Bombay](https://github.com/devrandom-labs/bombay)** | An actor framework that runs that logic, delivers messages, manages lifetimes, and coordinates application shutdown. | [Application examples](https://github.com/devrandom-labs/bombay/tree/main/examples) |
+| **[Mnesis](https://github.com/devrandom-labs/mnesis)** | Event storage and replay: record state changes, rebuild application state, and support recovery. | [Overview and examples](https://github.com/devrandom-labs/mnesis#readme) |
 
----
+These libraries are under active development. Their READMEs and capability
+records describe current support and limitations.
 
-## The demo we're building
+## Bringing it together
 
-```console
-joel@devrandom.co:~$ agency create researcher
-✓ new agent — ID issued by you, not by a vendor
+**Agency** is the product direction: let organizations adopt agent applications,
+grant access, delegate work, and review results under their own rules.
 
-joel@devrandom.co:~$ agency watch researcher
-● signed ✓ read repo    signed ✓ opened pull request
+The execution engine comes first. Its initial goal is to carry out an approved
+action, survive a lost reply or restart, and recover the outcome without blindly
+repeating the action. Permissions, approvals, withdrawal of access, and recovery
+are being developed as one execution problem. The complete workflow is not yet
+available.
 
-joel@devrandom.co:~$ agency kill researcher
-✗ stopped mid-task — authority gone, provably
-```
+## Build with us
 
-Two nodes, one delegated agent doing real work. Revoke the delegation from your
-laptop and its **next signed action fails verification mid-task** — every step
-replayable from the event log. That's the whole thesis in three commands.
+If you're building identity infrastructure, agent applications, or systems that
+need accountable automation, we'd like to compare requirements and work through
+a concrete use case.
 
----
-
-## Start here
-
-```console
-joel@devrandom.co:~$ cargo add cesr-rs
-   # the first layer, installable today
-```
-
-- 🌐 **[devrandom.co](https://devrandom.co)** — what we're building and why
-- 📦 **[crates.io/crates/cesr-rs](https://crates.io/crates/cesr-rs)** · 📖 **[docs.rs/cesr-rs](https://docs.rs/cesr-rs)**
-- 🔭 **[cesr](https://github.com/devrandom-labs/cesr)** · **[mnesis](https://github.com/devrandom-labs/mnesis)** · **[bombay](https://github.com/devrandom-labs/bombay)** — the public layers, built in the open
+**[Talk to Joel](mailto:joel@devrandom.co)** · [Explore the repositories](https://github.com/orgs/devrandom-labs/repositories) · [Contribute](https://github.com/devrandom-labs/.github/blob/main/CONTRIBUTING.md)
 
 ---
 
-<sub>Built in the open, in Rust — the receipts are in CI. Dual-licensed MIT OR Apache-2.0.</sub>
+<sub>Public foundations in Rust · MIT OR Apache-2.0 · Built in the open</sub>
