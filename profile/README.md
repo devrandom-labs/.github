@@ -4,106 +4,47 @@
 
 # /dev/random
 
-### Give agents authority. Keep control.
+### Let agents do the work. You stay in control.
 
-Identity, permissions, and dependable execution for AI agents.<br>
-Built on open-source Rust foundations.
-
-[Explore the foundations](#open-source-foundations) · [Compare the technologies](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md) · [Talk to Joel](mailto:joel@devrandom.co)
+[Explore the code](#open-source-foundations) · [How we compare](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md) · [Talk to Joel](mailto:joel@devrandom.co)
 
 </div>
 
----
+We're building **Agency**: software for giving AI agents permission to act on
+behalf of people and businesses—and keeping control as they work.
 
-An agent that can use your tools can also change your business. You need to know
-who it represents, what it may do, and what actually happened when it acted.
+**Know who an agent represents. Decide what it can do. See what happened.**
 
-**We're building the connection between identity and action:** identities that
-people and organizations control, explicit permission to act on their behalf,
-and an execution system that enforces those decisions as work happens.
+An agent might read a customer case and draft a reply. Sending it should require
+approval of that exact message. If the connection drops after sending, the system
+should check the outcome before risking a duplicate.
 
-## What we're building
+That's the job we're bringing together:
 
-The goal is to make delegated work answer four concrete questions:
+- **Identity you control:** verify who an agent represents, with a history of who controls its identity.
+- **Permission for the task:** limit access, require approvals, and apply changes to permission before further actions.
+- **Work you can account for:** record decisions and results, recover after interruptions, and keep uncertain outcomes visible.
 
-| Question | What it means in practice |
-| --- | --- |
-| **Who does this agent represent?** | Verify the agent's identity and the evidence connecting it to a person or organization. |
-| **What may it do?** | Limit access to particular resources and actions. Require approval for the actions that need it. |
-| **Can I change my mind?** | Withdraw permission and prevent further actions once that change is known to the execution system. |
-| **What actually happened?** | Recover the recorded decisions and outcomes after an interruption, and resolve uncertain results before retrying. |
-
-Identity supplies the evidence. The resource owner decides what that evidence
-permits. The execution system must apply that decision when the agent acts.
-
-## A concrete example
-
-Ask an agent to investigate a customer issue. Give it access to the relevant
-records and permission to draft a response. Sending that response requires
-approval of the exact message.
-
-The workflow we're building toward keeps those decisions explicit: access to
-records, permission to investigate, and approval to send. If access is withdrawn,
-further work must respect that change. If the system restarts after sending but
-before receiving confirmation, it must resolve the outcome before trying again.
-
-**Useful autonomy means you can delegate the work and retain authority over it.**
+Our focus is the whole path from permission to result, including what happens
+when access changes or something fails.
 
 ## Open-source foundations
 
-The public libraries already contain working code and examples. Each has its
-own scope and development status; the integrated agent product is still being
-built.
+These Rust libraries are public today:
 
-| Project | What exists today | Start here |
-| --- | --- | --- |
-| **[CESR / KERI](https://github.com/devrandom-labs/cesr)** | Cryptographic identity foundations: identifiers, key histories, rotation, delegation of identifier control, and credential verification for supported protocol profiles. | [Identity example](https://github.com/devrandom-labs/cesr/blob/main/crates/keri/examples/direct_mode.rs) · [Supported capabilities](https://github.com/devrandom-labs/cesr/blob/main/docs/capability-matrix.md) |
-| **[Behavior](https://github.com/devrandom-labs/bombay-behavior)** | Predictable, testable actor logic with explicit actions and reusable policies for supervision, timing, and shutdown. | [Overview and examples](https://github.com/devrandom-labs/bombay-behavior#readme) |
-| **[Bombay](https://github.com/devrandom-labs/bombay)** | An actor framework that runs that logic, delivers messages, manages lifetimes, and coordinates application shutdown. | [Application examples](https://github.com/devrandom-labs/bombay/tree/main/examples) |
-| **[Mnesis](https://github.com/devrandom-labs/mnesis)** | Event storage and replay: record state changes, rebuild application state, and support recovery. | [Overview and examples](https://github.com/devrandom-labs/mnesis#readme) |
-
-These libraries are under active development. Their READMEs and capability
-records describe current support and limitations.
-
-## Bringing it together
-
-**Agency** is the product direction: let organizations adopt agent applications,
-grant access, delegate work, and review results under their own rules.
-
-The execution engine comes first. Its initial goal is to carry out an approved
-action, survive a lost reply or restart, and recover the outcome without blindly
-repeating the action. Permissions, approvals, withdrawal of access, and recovery
-are being developed as one execution problem. The complete workflow is not yet
-available.
-
-## Where we compete
-
-We compete across the stack: identity, permissions, agent frameworks, and durable
-execution. A customer may choose one platform or assemble several tools. Our
-focus is keeping the owner's authority connected to the work from approval
-through execution and recovery.
-
-| Customer need | Technologies in the comparison |
+| Project | What it does |
 | --- | --- |
-| Identity and access | OAuth / OpenID Connect, Entra Agent ID, Google Agent Identity, Auth0, Keycloak, SPIFFE, DIDs and verifiable credentials, KERIpy / KERIA / Signify |
-| Delegation and permissions | Both PAP protocols, UCAN, Cedar, OPA, OpenFGA, AWS AgentCore Policy |
-| Agent interaction and transactions | MCP, A2A, AP2, Agentic Commerce Protocol, ERC-8004, x402 |
-| Agent and application execution | LangGraph, Google ADK, Microsoft Agent Framework, Akka, Orleans, Erlang/OTP |
-| Durable work and recovery | Temporal, Restate, Dapr |
+| **[CESR / KERI](https://github.com/devrandom-labs/cesr)** | Verify identities, changes to their keys, and supported credentials. |
+| **[Behavior](https://github.com/devrandom-labs/bombay-behavior)** | Make application decisions explicit and testable. |
+| **[Bombay](https://github.com/devrandom-labs/bombay)** | Run the work, coordinate messages, and manage shutdown. |
+| **[Mnesis](https://github.com/devrandom-labs/mnesis)** | Record changes and rebuild application state after a restart. |
 
-**[Read the head-to-head comparison](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md)**
-for strengths, tradeoffs, our position, and the same failure scenarios applied to
-each relevant system. It includes primary sources and distinguishes available
-capabilities from development goals.
+Each repository documents its current scope and examples. The complete Agency
+workflow is still being built.
 
-## Build with us
-
-If you're building identity infrastructure, agent applications, or systems that
-need accountable automation, we'd like to compare requirements and work through
-a concrete use case.
-
-**[Talk to Joel](mailto:joel@devrandom.co)** · [Explore the repositories](https://github.com/orgs/devrandom-labs/repositories) · [Contribute](https://github.com/devrandom-labs/.github/blob/main/CONTRIBUTING.md)
+**Building agents that act for your customers or your business?**
+[Talk to Joel](mailto:joel@devrandom.co) · [Compare approaches](https://github.com/devrandom-labs/.github/blob/main/docs/comparison.md) · [Contribute](https://github.com/devrandom-labs/.github/blob/main/CONTRIBUTING.md)
 
 ---
 
-<sub>Public foundations in Rust · MIT OR Apache-2.0 · Built in the open</sub>
+<sub>Open-source Rust foundations · MIT OR Apache-2.0</sub>
